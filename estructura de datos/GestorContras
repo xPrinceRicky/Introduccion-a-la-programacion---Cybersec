@@ -1,0 +1,259 @@
+import re
+import hashlib
+import secrets
+import string
+from datetime import datetime
+
+class GestorContraseñas:
+    def __init__(self):
+        self.usuarios = []
+        self.contraseñas = []
+        self.alertas = []
+    
+    def registrar_usuario(self, usuario, contraseña):
+        """
+        Registra un nuevo usuario con su contraseña
+        """
+        if usuario in self.usuarios:
+            print(f" El usuario '{usuario}' ya existe.")
+            return False
+        
+        if not self._verificar_fortaleza_contraseña(contraseña):
+            print(" La contraseña no cumple con los requisitos de seguridad.")
+            return False
+        
+        contraseña_hash = self._hash_contraseña(contraseña)
+        
+        self.usuarios.append(usuario)
+        self.contraseñas.append(contraseña_hash)
+        
+        print(f" Usuario '{usuario}' registrado exitosamente.")
+        return True
+    
+    def _verificar_fortaleza_contraseña(self, contraseña):
+        """
+        Verifica la fortaleza de una contraseña
+        """
+        if len(contraseña) < 8:
+            return False
+        
+        criterios = {
+            'mayúsculas': bool(re.search(r'[A-Z]', contraseña)),
+            'minúsculas': bool(re.search(r'[a-z]', contraseña)),
+            'números': bool(re.search(r'\d', contraseña)),
+            'caracteres_especiales': bool(re.search(r'[!@#$%^&*(),.?":{}|<>]', contraseña)),
+            'sin_espacios': ' ' not in contraseña
+        }
+        
+        criterios_cumplidos = sum(criterios.values())
+        
+        if criterios_cumplidos < 4:
+            self._generar_alerta(f"Contraseña débil detectada. Criterios cumplidos: {criterios_cumplidos}/5")
+            return False
+        
+        return True
+    
+    def _hash_contraseña(self, contraseña):
+        """
+        Convierte la contraseña en un hash seguro
+        """
+        return hashlib.sha256(contraseña.encode()).hexdigest()
+    
+    def verificar_contraseña(self, usuario, contraseña):
+        """
+        Verifica si la contraseña coincide para un usuario
+        """
+        if usuario not in self.usuarios:
+            print(" Usuario no encontrado.")
+            return False
+        
+        indice = self.usuarios.index(usuario)
+        contraseña_hash = self._hash_contraseña(contraseña)
+        
+        if self.contraseñas[indice] == contraseña_hash:
+            print(" Contraseña correcta.")
+            return True
+        else:
+            print(" Contraseña incorrecta.")
+            return False
+    
+    def _generar_alerta(self, mensaje):
+        """
+        Genera una alerta de seguridad
+        """
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        alerta = f"[{timestamp}] ALERTA: {mensaje}"
+        self.alertas.append(alerta)
+        print(f"  {alerta}")
+    
+    def generar_contraseña_segura(self, longitud=12):
+        """
+        Genera una contraseña segura automáticamente
+        """
+        if longitud < 8:
+            longitud = 8
+        
+        letras_mayusculas = string.ascii_uppercase
+        letras_minusculas = string.ascii_lowercase
+        digitos = string.digits
+        caracteres_especiales = "!@#$%^&*()"
+        
+        contraseña = [
+            secrets.choice(letras_mayusculas),
+            secrets.choice(letras_minusculas),
+            secrets.choice(digitos),
+            secrets.choice(caracteres_especiales)
+        ]
+        
+        todos_caracteres = letras_mayusculas + letras_minusculas + digitos + caracteres_especiales
+        contraseña.extend(secrets.choice(todos_caracteres) for _ in range(longitud - 4))
+        
+        secrets.SystemRandom().shuffle(contraseña)
+        
+        contraseña_generada = ''.join(contraseña)
+        print(f" Contraseña generada: {contraseña_generada}")
+        return contraseña_generada
+    
+    def mostrar_usuarios(self):
+        """
+        Muestra todos los usuarios registrados (sin contraseñas)
+        """
+        if not self.usuarios:
+            print(" No hay usuarios registrados.")
+            return
+        
+        print("\n Usuarios registrados:")
+        for i, usuario in enumerate(self.usuarios, 1):
+            print(f"  {i}. {usuario}")
+    
+    def mostrar_alertas(self):
+        """
+        Muestra todas las alertas generadas
+        """
+        if not self.alertas:
+            print(" No hay alertas de seguridad.")
+            return
+        
+        print("\n Alertas de seguridad:")
+        for alerta in self.alertas:
+            print(f"  • {alerta}")
+    
+    def evaluar_contraseña(self, contraseña):
+        """
+        Evalúa y muestra información detallada sobre la fortaleza de una contraseña
+        """
+        print(f"\n🔍 Evaluando contraseña: {'*' * len(contraseña)}")
+        
+        puntuacion = 0
+        criterios = {}
+        
+        if len(contraseña) >= 12:
+            criterios['Longitud ≥ 12 caracteres'] = True
+            puntuacion += 2
+        elif len(contraseña) >= 8:
+            criterios['Longitud ≥ 8 caracteres'] = True
+            puntuacion += 1
+        else:
+            criterios['Longitud ≥ 8 caracteres'] = False
+        
+        criterios['Contiene mayúsculas'] = bool(re.search(r'[A-Z]', contraseña))
+        if criterios['Contiene mayúsculas']:
+            puntuacion += 1
+        
+        criterios['Contiene minúsculas'] = bool(re.search(r'[a-z]', contraseña))
+        if criterios['Contiene minúsculas']:
+            puntuacion += 1
+        
+        criterios['Contiene números'] = bool(re.search(r'\d', contraseña))
+        if criterios['Contiene números']:
+            puntuacion += 1
+        
+        criterios['Contiene caracteres especiales'] = bool(re.search(r'[!@#$%^&*(),.?":{}|<>]', contraseña))
+        if criterios['Contiene caracteres especiales']:
+            puntuacion += 1
+        
+        criterios['Sin espacios'] = ' ' not in contraseña
+        if criterios['Sin espacios']:
+            puntuacion += 1
+        
+        print("Criterios cumplidos:")
+        for criterio, cumplido in criterios.items():
+            estado = "Valido" if cumplido else "Invalido"
+            print(f"  {estado} {criterio}")
+        
+        if puntuacion >= 6:
+            fortaleza = "MUY FUERTE"
+        elif puntuacion >= 4:
+            fortaleza = "FUERTE"
+        elif puntuacion >= 3:
+            fortaleza = "MEDIA"
+        else:
+            fortaleza = "DÉBIL"
+        
+        print(f"\nPuntuación: {puntuacion}/7")
+        print(f"Fortaleza: {fortaleza}")
+        
+        return puntuacion >= 4
+
+def menu_principal():
+    """
+    Interfaz de usuario para el gestor de contraseñas
+    """
+    gestor = GestorContraseñas()
+    
+    while True:
+        print("\n" + "="*50)
+        print("          GESTOR DE CONTRASEÑAS SEGURAS")
+        print("="*50)
+        print("1. Registrar nuevo usuario")
+        print("2. Verificar contraseña")
+        print("3. Generar contraseña segura")
+        print("4. Evaluar fortaleza de contraseña")
+        print("5. Mostrar usuarios")
+        print("6. Mostrar alertas")
+        print("7. Salir")
+        print("-"*50)
+        
+        opcion = input("Selecciona una opción (1-7): ").strip()
+        
+        if opcion == "1":
+            print("\n--- REGISTRAR USUARIO ---")
+            usuario = input("Nombre de usuario: ").strip()
+            contraseña = input("Contraseña: ").strip()
+            gestor.registrar_usuario(usuario, contraseña)
+        
+        elif opcion == "2":
+            print("\n--- VERIFICAR CONTRASEÑA ---")
+            usuario = input("Usuario: ").strip()
+            contraseña = input("Contraseña: ").strip()
+            gestor.verificar_contraseña(usuario, contraseña)
+        
+        elif opcion == "3":
+            print("\n--- GENERAR CONTRASEÑA SEGURA ---")
+            try:
+                longitud = int(input("Longitud de la contraseña (mínimo 8): ") or "12")
+                gestor.generar_contraseña_segura(longitud)
+            except ValueError:
+                print("Longitud inválida. Usando longitud por defecto (12).")
+                gestor.generar_contraseña_segura()
+        
+        elif opcion == "4":
+            print("\n--- EVALUAR FORTALEZA DE CONTRASEÑA ---")
+            contraseña = input("Contraseña a evaluar: ").strip()
+            gestor.evaluar_contraseña(contraseña)
+        
+        elif opcion == "5":
+            gestor.mostrar_usuarios()
+        
+        elif opcion == "6":
+            gestor.mostrar_alertas()
+        
+        elif opcion == "7":
+            print("¡Hasta pronto!")
+            break
+        
+        else:
+            print("Opción inválida. Por favor, selecciona 1-7.")
+
+if __name__ == "__main__":
+    menu_principal()
