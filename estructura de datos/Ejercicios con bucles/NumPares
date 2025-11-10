@@ -1,0 +1,7 @@
+# Muestra todos los números pares entre 1 y 50.
+
+numero = 2
+
+while numero <= 50:
+    print(numero)
+    numero += 2

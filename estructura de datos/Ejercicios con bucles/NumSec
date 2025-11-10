@@ -1,0 +1,10 @@
+# Adivina el número secreto
+
+secreto = 7
+numero = int(input("Adivina el número secreto (entre 1 y 10): "))
+
+while numero != secreto:
+    print("Incorrecto, intenta de nuevo.")
+    numero = int(input("Adivina el número secreto (entre 1 y 10): "))
+
+print("¡Correcto! El número secreto era", secreto)

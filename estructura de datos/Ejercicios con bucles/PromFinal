@@ -1,0 +1,13 @@
+# Pide 5 notas, calcula la suma y el promedio final.
+
+suma = 0
+contador = 1
+
+while contador <= 5:
+    nota = float(input("Ingresa la nota " + str(contador) + ": "))
+    suma += nota
+    contador += 1
+
+promedio = suma / 5
+print("La suma de las notas es:", suma)
+print("El promedio final es:", promedio)

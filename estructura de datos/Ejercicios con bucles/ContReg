@@ -1,0 +1,7 @@
+# Crea un contador regresivo desde 10 hasta 1.
+
+contador = 10
+
+while contador >= 1:
+    print(contador)
+    contador -= 1
