@@ -1,0 +1,8 @@
+# Pedir un número al usuario
+numero = int(input("Ingresa un número entero: "))
+
+# Calcular su doble
+doble = numero * 2
+
+# Mostrar el resultado
+print("El doble de", numero, "es", doble)
