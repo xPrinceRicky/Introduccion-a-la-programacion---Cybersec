@@ -1,0 +1,16 @@
+vulnerabilidades = ('SQL Injection',
+                    'Cross-Site Scripting',
+                    'Buffer Overflow',
+                    'Denegación de Servicio')
+
+# a) Mostrar el segundo elemento
+print("a) Segundo elemento:", vulnerabilidades[1])
+
+# b) Mostrar los dos últimos elementos
+print("b) Dos últimos elementos:", vulnerabilidades[-2:])
+
+# c) Intentar modificar un elemento (esto lanzará un TypeError porque las tuplas son inmutables)
+try:
+    vulnerabilidades[0] = 'Inyección SQL'   # intento de asignación inválida
+except TypeError as e:
+    print("c) Intento de modificar la tupla -> Error:", type(e).__name__, "-", e)

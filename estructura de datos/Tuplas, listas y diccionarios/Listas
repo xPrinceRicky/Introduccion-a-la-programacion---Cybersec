@@ -1,0 +1,11 @@
+puertos_abiertos = [22, 80, 443, 8080]
+
+# a) Agregar el puerto 21
+puertos_abiertos.append(21)
+
+# b) Eliminar el puerto 8080
+puertos_abiertos.remove(8080)
+
+# c) Mostrar la lista ordenada
+puertos_abiertos.sort()
+print("Lista de puertos ordenada:", puertos_abiertos)
