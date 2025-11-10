@@ -1,0 +1,7 @@
+# Pregunta si el usuario tiene internet en casa
+
+respuesta = int(input("¿Tienes internet en casa? (1 = Sí, 0 = No): "))
+
+tiene_internet = respuesta == 1
+
+print("Tiene internet en casa:", tiene_internet)

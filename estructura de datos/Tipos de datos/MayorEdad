@@ -1,0 +1,7 @@
+# Pide al usuario su edad y muestra si es mayor de edad
+
+edad = int(input("Ingresa tu edad: "))
+
+es_mayor = edad >= 18
+
+print("¿Es mayor de edad?:", es_mayor)

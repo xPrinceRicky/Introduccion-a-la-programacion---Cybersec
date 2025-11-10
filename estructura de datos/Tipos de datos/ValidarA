@@ -1,0 +1,8 @@
+# Ingresa un carácter y muestra "Correcto" si es la letra 'A'
+
+caracter = input("Ingresa un carácter: ")
+
+if caracter == 'A':
+    print("Correcto")
+else:
+    print("Incorrecto")

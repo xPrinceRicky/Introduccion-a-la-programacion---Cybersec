@@ -1,0 +1,4 @@
+num = float(input("Ingresa un número real: "))
+mitad = num / 2
+
+print("La mitad es:", mitad)

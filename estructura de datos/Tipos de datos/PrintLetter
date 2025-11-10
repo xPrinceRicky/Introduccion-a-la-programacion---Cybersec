@@ -1,0 +1,4 @@
+# Pide al usuario una letra y la muestra en pantalla
+
+letra = input("Escribe una letra: ")
+print("La letra que escribiste es:", letra)

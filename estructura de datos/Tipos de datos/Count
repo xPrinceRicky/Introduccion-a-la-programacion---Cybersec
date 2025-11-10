@@ -1,0 +1,4 @@
+# Solicita una palabra y muestra cuántos caracteres tiene
+
+palabra = input("Escribe una palabra: ")
+print("La palabra tiene", len(palabra), "caracteres.")
