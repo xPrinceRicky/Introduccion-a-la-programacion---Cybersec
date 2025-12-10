@@ -1,11 +1,11 @@
-# 🔐 Gestor de Contraseñas Seguras
+# Gestor de Contraseñas Seguras
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 1. Python 3.8 o superior
 2. MySQL Server instalado y ejecutándose
 3. MySQL Workbench (opcional, para gestión)
 
-## 🚀 Instalación
+## Instalación
 
 ### Paso 1: Clonar/Descargar
 ```bash
